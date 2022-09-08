@@ -1,0 +1,110 @@
+.home-container {
+  height: 100%;
+  flex-direction: column;
+  gap: 15px;
+
+  .logo {
+    min-height: 90px;
+  }
+  .container {
+    width: 400px;
+    min-height: 200px;
+    background: #ffff;
+    border-radius: 5px;
+    padding: 15px;
+    box-sizing: border-box;
+    flex-direction: column;
+
+    & > div {
+      width: 100%;
+    }
+
+    input {
+      height: 40px;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 18px;
+    }
+
+    button {
+      height: 40px;
+      width: 100%;
+      background: #1b8bfc;
+      color: #ffff;
+      font-size: 18px;
+      border-radius: 5px;
+    }
+
+    .room {
+      margin-top: 30px;
+
+      .divider {
+        border-bottom: 1px solid lightgrey;
+        margin: 20px 0;
+
+        &::before {
+          content: 'OR';
+          width: 35px;
+          position: absolute;
+          background: #ffff;
+          font-size: 15px;
+          transform: translate(-13px, -11px);
+          color: grey;
+        }
+      }
+      .join-room {
+        gap: 5px;
+        & > * {
+          flex: 1;
+        }
+        button {
+          background: #00b44b;
+        }
+      }
+    }
+    .error {
+      color: #f70101;
+      font-weight: 500;
+      text-align: left;
+      margin-top: 10px;
+    }
+  }
+  .attrition {
+    color: #fff;
+    font-family: cursive;
+  }
+  .how-to button {
+    color: #fff;
+    font-size: 20px;
+  }
+
+  .tech {
+    color: #ffff;
+    font-size: 14px;
+    ul {
+      gap: 10px;
+      margin-top: 5px;
+    }
+  }
+  @media only screen and (max-width: 800px) {
+    gap: 10px;
+    .container {
+      width: 350px;
+      border-radius: 10px;
+    }
+    .logo {
+      margin-bottom: -10px;
+      img {
+        width: 300px;
+      }
+    }
+
+    .tech {
+      position: absolute;
+      width: 100%;
+      padding: 5px;
+      bottom: 10px;
+      background: #3f3f3f31;
+    }
+  }
+}

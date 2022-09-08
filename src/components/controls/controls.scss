@@ -1,0 +1,76 @@
+.controls-container {
+  padding: 5px;
+  & > * {
+    margin-right: 10px;
+  }
+
+  .colors {
+    width: 170px;
+    flex-wrap: wrap;
+    div {
+      width: 20px;
+      height: 20px;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+  }
+
+  .selected-color {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  .box {
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+    cursor: pointer;
+    display: flex;
+    background: #ffff;
+    box-sizing: border-box;
+  }
+
+  .pen-sizes .box > div {
+    border-radius: 50%;
+    background: black;
+  }
+
+  .selected {
+    background: #d392ff;
+  }
+
+  .erase,
+  .brush,
+  .clear {
+    box-sizing: border-box;
+  }
+
+  .erase {
+    background-image: url(../../assets/icons/eraser.png);
+    background-size: cover;
+    width: 25px;
+    height: 25px;
+  }
+
+  .brush {
+    background-image: url(../../assets/icons/pencil.png);
+    background-size: cover;
+    width: 35px;
+    height: 35px;
+  }
+
+  .clear {
+    background-image: url(../../assets/icons/trash.png);
+    background-size: cover;
+    width: 35px;
+    height: 35px;
+  }
+
+  @media only screen and (max-width: 800px) {
+    flex-wrap: wrap;
+    > div {
+      margin-bottom: 5px;
+    }
+  }
+}

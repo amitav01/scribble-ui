@@ -1,0 +1,70 @@
+.chats-container {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  height: 500px;
+  background: #f3f3f3;
+  border-radius: 5px;
+  padding: 5px;
+  box-sizing: border-box;
+
+  .message-container {
+    flex: 1;
+    overflow: auto;
+    ul {
+      margin-bottom: 50px;
+      li {
+        list-style-type: none;
+        text-align: left;
+        padding: 5px;
+        font-size: 14px;
+        &:nth-child(even) {
+          background: #ffff;
+        }
+        .system {
+          color: #0070e2;
+          font-weight: 500;
+        }
+        .guessed {
+          color: #00af00;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  .input-container {
+    padding: 10px 5px;
+    gap: 5px;
+    justify-content: space-between;
+    input {
+      width: 85%;
+      border-radius: 5px;
+      &:focus {
+        border-color: #0059ff;
+      }
+      &[readonly] {
+        cursor: not-allowed;
+      }
+    }
+    .send {
+      background-image: url(../../assets/icons/send.png);
+      background-size: cover;
+      width: 35px;
+      height: 35px;
+    }
+  }
+
+  @media only screen and (max-width: 800px) {
+    width: 380px;
+    height: 200px;
+    margin-top: 5px;
+    input {
+      width: 90% !important;
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}

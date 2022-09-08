@@ -1,0 +1,74 @@
+.players-container {
+  width: 230px;
+  height: 500px;
+  position: relative;
+
+  ::selection {
+    background: #005eeb !important;
+  }
+
+  li {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 5px;
+    margin-bottom: 5px;
+    background: #f3f3f3;
+    height: 38px;
+
+    .rank {
+      width: 25px;
+      font-size: 25px;
+      font-weight: 700;
+      font-family: AlMaklum;
+      color: #9517fc;
+      margin-right: 20px;
+      animation: rank 1.5s infinite;
+
+      @keyframes rank {
+        0% {
+          font-size: 25px;
+        }
+        50% {
+          font-size: 23px;
+        }
+        80% {
+          font-size: 25px;
+        }
+      }
+    }
+    .player {
+      margin-left: 15px;
+      text-align: left;
+
+      .name {
+        font-size: 17px;
+        font-weight: 500;
+        span {
+          color: #8a8a8a;
+          font-size: 14px;
+          font-weight: normal;
+        }
+      }
+      .score {
+        font-size: 14px;
+
+        span {
+          color: #005eeb;
+          font-size: 15px;
+        }
+      }
+    }
+  }
+  .roomId {
+    position: absolute;
+    bottom: 10px;
+    width: inherit;
+    color: #d5d4d4;
+    font-weight: 500;
+    font-family: monospace;
+    font-size: 16px;
+  }
+}

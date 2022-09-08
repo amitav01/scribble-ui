@@ -1,0 +1,61 @@
+.header-container {
+  height: 50px;
+  width: 1170px;
+  padding: 5px 20px;
+  background: #f3f3f3;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  position: relative;
+  box-sizing: border-box;
+
+  & > div {
+    flex: 1;
+  }
+
+  .round {
+    text-align: left;
+    font-size: 20px;
+    font-family: cursive;
+  }
+
+  .word {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 500;
+    span:last-child {
+      margin-left: 10px;
+    }
+    &.font-30 {
+      font-size: 30px;
+      letter-spacing: 3px;
+      margin-left: 20px !important;
+    }
+  }
+
+  .time {
+    justify-content: end;
+    .timer {
+      width: 40px;
+      height: 40px;
+      border: 1px solid black;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 2.1;
+      font-weight: 500;
+      font-size: 18px;
+    }
+    .time-indicator {
+      height: 5px;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+  }
+  @media only screen and (max-width: 800px) {
+    width: 380px;
+    .round {
+      font-weight: 600;
+    }
+  }
+}

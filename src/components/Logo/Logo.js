@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoImg from '../../assets/images/logo.png';
 
@@ -10,4 +11,4 @@ const Logo = ({ width }) => {
   );
 };
 
-export default Logo;
+export default memo(Logo);

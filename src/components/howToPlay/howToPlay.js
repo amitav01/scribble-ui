@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { howToPlayTexts } from '../../utils/constants';
 import './howToPlay.scss';
 
@@ -25,4 +26,4 @@ const HowToPlay = ({ close }) => {
   );
 };
 
-export default HowToPlay;
+export default memo(HowToPlay);

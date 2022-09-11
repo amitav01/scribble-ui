@@ -9,6 +9,7 @@ import js from '../assets/icons/js.png';
 import node from '../assets/icons/node.png';
 import socket from '../assets/icons/socket.svg';
 import mongoDB from '../assets/icons/mongoDB.png';
+import express from '../assets/icons/express.png';
 
 export const avatars = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6];
 
@@ -18,6 +19,7 @@ export const technologies = [
   { img: node, name: 'NodeJs', link: 'https://nodejs.org/en/about/' },
   { img: socket, name: 'Socket.io', link: 'https://socket.io/' },
   { img: mongoDB, name: 'MongoDB', link: 'https://www.mongodb.com/' },
+  { img: express, name: 'Express', link: 'https://expressjs.com/' },
 ];
 
 export const colors = [

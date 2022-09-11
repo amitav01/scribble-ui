@@ -1,10 +1,9 @@
 .chats-container {
   display: flex;
   flex-direction: column;
-  width: 250px;
-  height: 500px;
+  width: 220px;
+  height: 460px;
   background: #f3f3f3;
-  border-radius: 5px;
   padding: 5px;
   box-sizing: border-box;
 
@@ -17,7 +16,7 @@
         list-style-type: none;
         text-align: left;
         padding: 5px;
-        font-size: 14px;
+        font-size: 13px;
         &:nth-child(even) {
           background: #ffff;
         }
@@ -34,7 +33,7 @@
   }
 
   .input-container {
-    padding: 10px 5px;
+    padding-top: 10px;
     gap: 5px;
     justify-content: space-between;
     input {
@@ -56,7 +55,7 @@
   }
 
   @media only screen and (max-width: 800px) {
-    width: 380px;
+    width: 370px;
     height: 200px;
     margin-top: 5px;
     input {

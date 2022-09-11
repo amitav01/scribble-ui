@@ -1,5 +1,5 @@
-import { memo } from "react";
-import "./header.scss";
+import { memo } from 'react';
+import './header.scss';
 
 const Header = ({
   rounds,
@@ -14,8 +14,8 @@ const Header = ({
       <div className="round">
         Round: {currentRound}/{rounds}
       </div>
-      <div className={`word ${!isCurrentUserDrawing && "font-30"}`}>
-        {time > -1 && currentWord.split(' ').map(v => <span key={v}>{v}</span>)}
+      <div className={`word ${!isCurrentUserDrawing && 'font-25'}`}>
+        {time > -1 && currentWord.split(' ').map((v) => <span key={v}>{v}</span>)}
       </div>
       <div className="time d-flex">
         {time > -1 && (
@@ -25,7 +25,7 @@ const Header = ({
               className="time-indicator"
               style={{
                 width: `${(time / totalTime) * 100}%`,
-                background: time > 10 ? "#00b44b" : "#f30101",
+                background: time > 10 ? '#00b44b' : '#f30101',
               }}
             ></div>
           </>

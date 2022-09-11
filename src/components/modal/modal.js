@@ -1,4 +1,5 @@
-import "./modal.scss";
+import { memo } from 'react';
+import './modal.scss';
 
 const Modal = ({ title, message, click }) => {
   return (
@@ -18,4 +19,4 @@ const Modal = ({ title, message, click }) => {
   );
 };
 
-export default Modal;
+export default memo(Modal);

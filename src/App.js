@@ -16,6 +16,7 @@ import {
   setPlayers,
   setScore,
   setShowOption,
+  setTimeOver,
 } from './store/actions';
 import { useSocket } from './utils/useSocket';
 import ErrorBoundary from './components/ErrorBoundary/errorBoundary';
@@ -27,8 +28,8 @@ import './App.scss';
 let firstRender = true;
 
 function App() {
-  const { socketId, roomId } = useSelector((state) => state);
-  const { listen, removeListener } = useSocket();
+  const roomId = useSelector((state) => state.roomId);
+  const { socketId, listen, removeListener } = useSocket();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [appError, setAppError] = useState();
@@ -37,7 +38,9 @@ function App() {
     gameStarted: new Audio(gameStartedSound),
   });
   const locationRef = useRef(); // to access latest location inside callback
+  const socketIdRef = useRef();
   locationRef.current = useLocation();
+  socketIdRef.current = socketId;
 
   useEffect(() => {
     if (firstRender && window.innerWidth < 800) {
@@ -58,49 +61,40 @@ function App() {
   }, []);
 
   useEffect(() => {
-    listen('player-joined', (allPlayers, name, gameStarted) => {
-      audiosRef.current.playerJoined.play();
-      dispatch(setPlayers(allPlayers));
-      if (gameStarted) {
-        addMessage(`${name} joined`);
-      }
-    });
-
-    listen('game-started', (rounds, drawTime) => {
-      dispatch(saveGameSettings(rounds, drawTime));
-      playGameStartSound();
-      navigate('/play');
-    });
-
-    listen('joined-ongoing-game', joinedOngoingGame);
-
-    listen('user-left', (name, players, score) => {
-      dispatch(setPlayers(players));
-      dispatch(setScore(score));
-      addMessage(`${name} left the game`);
-    });
-
-    listen('server-error', (e) => {
-      setAppError(errorMessages.server_error);
-      console.error(e);
-    });
+    listen('player-joined', playerJoinedHandler);
+    listen('game-started', gameStartedHandler);
+    listen('joined-ongoing-game', joinedOngoingGameHandler);
+    listen('current-player', currentPlayerHandler);
+    listen('user-left', userLeftHandler);
+    listen('server-error', serverErrorHandler);
 
     return () =>
       removeListener(
         'player-joined',
         'game-started',
         'joined-ongoing-game',
+        'current-player',
         'user-left',
         'server-error',
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const playGameStartSound = () => {
-    audiosRef.current.gameStarted.play();
+  const playerJoinedHandler = (allPlayers, name, isGameStarted) => {
+    audiosRef.current.playerJoined.play();
+    dispatch(setPlayers(allPlayers));
+    if (isGameStarted) {
+      addMessage(`${name} joined`);
+    }
   };
 
-  const joinedOngoingGame = ({
+  const gameStartedHandler = (rounds, drawTime) => {
+    dispatch(saveGameSettings(rounds, drawTime));
+    playGameStartSound();
+    navigate('/play', { replace: true });
+  };
+
+  const joinedOngoingGameHandler = ({
     rounds,
     drawTime,
     currentRound,
@@ -115,11 +109,11 @@ function App() {
       dispatch(setDrawingMode(true));
       addMessage(`${currrentPlayer.name} is drawing`);
     } else {
-      if (currrentPlayer.id !== socketId) dispatch(setOptions(currentOptions));
+      if (currrentPlayer.id !== socketIdRef.current) dispatch(setOptions(currentOptions));
       dispatch(setShowOption(true));
     }
     const theWord =
-      currrentPlayer.id !== socketId
+      currrentPlayer.id !== socketIdRef.current
         ? currentWord
             .split(' ')
             .map((v) => v.replace(/[a-z|A-Z]/g, '_'))
@@ -132,6 +126,24 @@ function App() {
     navigate('/play');
   };
 
+  const currentPlayerHandler = (player, options) => {
+    dispatch(setCurrentPlayer(player));
+    dispatch(setTimeOver(false));
+    if (player.id === socketIdRef.current) dispatch(setOptions(options));
+    dispatch(setShowOption(true));
+  };
+
+  const userLeftHandler = (name, players, score, hasGameStarted) => {
+    dispatch(setPlayers(players));
+    dispatch(setScore(score));
+    if (hasGameStarted) addMessage(`${name} left the game`);
+  };
+
+  const serverErrorHandler = (e) => {
+    setAppError(errorMessages.server_error);
+    console.error(e);
+  };
+
   const addMessage = (message) => {
     dispatch(
       setMessages({
@@ -142,6 +154,10 @@ function App() {
     );
   };
 
+  const playGameStartSound = () => {
+    audiosRef.current.gameStarted.play();
+  };
+
   const errorModalClose = () => {
     setAppError();
     navigate('/');
@@ -150,27 +166,25 @@ function App() {
 
   return (
     <div className="app">
-      <div className="main">
-        <ErrorBoundary
-          appError={appError}
-          setAppError={setAppError}
-          click={errorModalClose}
-        >
-          <Routes>
-            <Route path="/" element={<Home />} />
-            {roomId && (
-              <>
-                <Route
-                  path="/lobby"
-                  element={<Lobby playGameStartSound={playGameStartSound} />}
-                />
-                <Route path="/play" element={<Draw />} />
-              </>
-            )}
-            <Route path="*" element={<Navigate replace to="/" />} />
-          </Routes>
-        </ErrorBoundary>
-      </div>
+      <ErrorBoundary
+        appError={appError}
+        setAppError={setAppError}
+        click={errorModalClose}
+      >
+        <Routes>
+          <Route path="/" element={<Home />} />
+          {roomId && (
+            <>
+              <Route
+                path="/lobby"
+                element={<Lobby playGameStartSound={playGameStartSound} />}
+              />
+              <Route path="/play" element={<Draw />} />
+            </>
+          )}
+          <Route path="*" element={<Navigate replace to="/" />} />
+        </Routes>
+      </ErrorBoundary>
     </div>
   );
 }

@@ -1,10 +1,14 @@
 import { io } from 'socket.io-client';
 
 let socket;
+const SOCKET_SERVER =
+  process.env.NODE_ENV === 'production'
+    ? 'https://scribble-server.herokuapp.com/'
+    : 'http://localhost:8080';
 
 export const initSocket = () => {
-  socket = io('http://192.168.1.101:8080', {
-    closeOnBeforeunload: false
+  socket = io(SOCKET_SERVER, {
+    closeOnBeforeunload: false,
   });
 };
 

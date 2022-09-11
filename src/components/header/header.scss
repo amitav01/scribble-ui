@@ -1,9 +1,9 @@
 .header-container {
-  height: 50px;
-  width: 1170px;
-  padding: 5px 20px;
+  height: 45px;
+  width: 1045px;
+  padding: 5px 15px;
   background: #f3f3f3;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   border-radius: 5px;
   position: relative;
   box-sizing: border-box;
@@ -14,19 +14,19 @@
 
   .round {
     text-align: left;
-    font-size: 20px;
+    font-size: 18px;
     font-family: cursive;
   }
 
   .word {
     text-align: center;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 500;
     span:last-child {
       margin-left: 10px;
     }
-    &.font-30 {
-      font-size: 30px;
+    &.font-25 {
+      font-size: 25px;
       letter-spacing: 3px;
       margin-left: 20px !important;
     }
@@ -35,17 +35,17 @@
   .time {
     justify-content: end;
     .timer {
-      width: 40px;
-      height: 40px;
+      width: 35px;
+      height: 35px;
       border: 1px solid black;
       border-radius: 50%;
       text-align: center;
-      line-height: 2.1;
+      line-height: 2;
       font-weight: 500;
       font-size: 18px;
     }
     .time-indicator {
-      height: 5px;
+      height: 3px;
       width: 100%;
       position: absolute;
       bottom: 0;
@@ -53,9 +53,11 @@
     }
   }
   @media only screen and (max-width: 800px) {
-    width: 380px;
+    width: 370px;
+    padding: 5px 10px;
     .round {
       font-weight: 600;
+      font-size: 15px;
     }
   }
 }

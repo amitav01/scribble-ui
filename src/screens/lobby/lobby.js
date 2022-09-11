@@ -38,22 +38,21 @@ const Lobby = ({ playGameStartSound }) => {
     const rounds = roundsRef.current.value;
     const drawTime = drawTimeRef.current.value;
     dispatch(saveGameSettings(rounds, drawTime));
-    emit('start-game', roomId, rounds, drawTime);
-    setLoading(false);
+    emit('start-game', roomId, rounds, drawTime, () => setLoading(false));
     playGameStartSound();
     navigate('/play', { replace: true });
   };
 
   return (
     <div className="lobby-container">
-      <Logo width={200} />
+      <Logo width={160} />
       <div className="header"></div>
       <div>
         <ul className="players d-flex">
           {players.map((p) => (
             <li key={p.id}>
               <div className="d-flex">
-                <img src={avatars[p.avatarId]} width={60} height={60} alt="avatar" />
+                <img src={avatars[p.avatarId]} width={50} height={50} alt="avatar" />
                 <div>
                   {p.name.slice(-10)}
                   {socketId === p.id && <span style={{ color: '#ababab' }}> (You) </span>}
@@ -64,8 +63,10 @@ const Lobby = ({ playGameStartSound }) => {
         </ul>
       </div>
       <div className="invite d-flex card">
-        <label>Share the code with your friends</label>
-        <span className="info">(Max 6 people can play in a room)</span>
+        <div style={{ textAlign: 'left' }}>
+          <label>Share the code with your friends</label>
+          <div className="info">(Max 6 people can play in a room)</div>
+        </div>
         <div className="d-flex">
           <input type="text" maxLength={10} value={roomId} readOnly />
           <button onClick={copy}>{copyText}</button>

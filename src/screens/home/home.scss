@@ -1,46 +1,37 @@
 .home-container {
   height: 100%;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
 
   .logo {
-    min-height: 90px;
+    min-height: 80px;
   }
-  .container {
-    width: 400px;
-    min-height: 200px;
-    background: #ffff;
-    border-radius: 5px;
-    padding: 15px;
-    box-sizing: border-box;
-    flex-direction: column;
-
+  .card {
     & > div {
       width: 100%;
     }
 
     input {
-      height: 40px;
       width: 100%;
       border-radius: 5px;
-      font-size: 18px;
+      font-size: 15px;
     }
 
     button {
-      height: 40px;
+      height: 35px;
       width: 100%;
       background: #1b8bfc;
       color: #ffff;
-      font-size: 18px;
+      font-size: 16px;
       border-radius: 5px;
     }
 
     .room {
-      margin-top: 30px;
+      margin-top: 20px;
 
       .divider {
         border-bottom: 1px solid lightgrey;
-        margin: 20px 0;
+        margin: 15px 0;
 
         &::before {
           content: 'OR';
@@ -64,18 +55,20 @@
     }
     .error {
       color: #f70101;
+      font-size: 14px;
       font-weight: 500;
       text-align: left;
       margin-top: 10px;
     }
   }
+  .how-to button {
+    color: #ffff;
+    font-size: 16px;
+  }
   .attrition {
     color: #fff;
     font-family: cursive;
-  }
-  .how-to button {
-    color: #fff;
-    font-size: 20px;
+    font-size: 13px;
   }
 
   .tech {
@@ -88,8 +81,7 @@
   }
   @media only screen and (max-width: 800px) {
     gap: 10px;
-    .container {
-      width: 350px;
+    .card {
       border-radius: 10px;
     }
     .logo {
@@ -103,8 +95,8 @@
       position: absolute;
       width: 100%;
       padding: 5px;
-      bottom: 10px;
-      background: #3f3f3f31;
+      bottom: 0;
+      background: #0000001e;
     }
   }
 }

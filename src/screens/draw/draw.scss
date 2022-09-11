@@ -1,31 +1,32 @@
 .draw-container {
+  padding-bottom: 30px;
   flex-direction: column;
   ::selection {
     background: none;
   }
 
   .logo {
-    margin: 10px 0;
+    margin: 5px 0;
   }
 
   .container {
     align-items: flex-start;
     & > div:nth-child(n + 2) {
-      margin-left: 10px;
+      margin-left: 8px;
     }
   }
 
-  #canvas {
-    border-radius: 5px;
-    background: #ffff;
-    cursor: none;
+  #canvas-container {
+    position: relative;
+    #canvas {
+      background: #ffff;
+    }
   }
 
   .pointer {
     position: absolute;
     border: 1px solid;
     border-radius: 50%;
-    cursor: none;
   }
 
   @media only screen and (max-width: 800px) {
@@ -41,9 +42,6 @@
       > div {
         margin-left: 0 !important;
       }
-    }
-    .players-container {
-      display: none;
     }
   }
 }

@@ -1,7 +1,7 @@
-import { memo } from "react";
-import { avatars } from "../../utils/constants";
-import { useSocket } from "../../utils/useSocket";
-import "./players.scss";
+import { memo } from 'react';
+import { avatars } from '../../utils/constants';
+import { useSocket } from '../../utils/useSocket';
+import './players.scss';
 
 const Players = ({ roomId, players, score }) => {
   const { socketId } = useSocket();
@@ -13,12 +13,7 @@ const Players = ({ roomId, players, score }) => {
           {players.map((p) => (
             <li key={p.id}>
               <div className="d-flex">
-                <img
-                  src={avatars[p.avatarId]}
-                  alt="avatar"
-                  width={40}
-                  height={40}
-                />
+                <img src={avatars[p.avatarId]} alt="avatar" width={35} height={35} />
                 <div className="player">
                   <div className="name">
                     {p.name}

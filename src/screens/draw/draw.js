@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, memo } from 'react';
+import { useEffect, useRef, useState, memo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,12 +6,10 @@ import { useSocket } from '../../utils/useSocket';
 import { colors, penSizes } from '../../utils/constants';
 import {
   reset,
-  setCurrentPlayer,
   setCurrentRound,
   setCurrentWord,
   setDrawingMode,
   setMessages,
-  setOptions,
   setScore,
   setShowOption,
   setTimeOver,
@@ -91,19 +89,19 @@ const Draw = () => {
     ctx = canvas.getContext('2d');
     const pointer = document.querySelector('.pointer');
     if (pointer) {
-      const rect = canvas.getBoundingClientRect();
-      pointer.style.left = rect.left + canvas.width / 2 + 'px';
-      pointer.style.top = rect.top + canvas.height / 2 + 'px';
+      const { left, top } = canvas.getBoundingClientRect();
+      pointer.style.left = left + canvas.width / 2 + 'px';
+      pointer.style.top = top + canvas.height / 2 + 'px';
     }
   }, []);
 
   useEffect(() => {
     // Socket listeners
-    listen('current-player', currentPlayerHandler);
     listen('drawing-started', drawingStarted);
     listen('drawing-over', drawingOver);
     listen('round-over', roundOver);
     listen('game-over', gameOverHandler);
+    listen('received-message', receivedMessage);
 
     listen('mousedown', mousedown);
     listen('mouseup', mouseup);
@@ -113,11 +111,8 @@ const Draw = () => {
     listen('select-color', setPenColor);
     listen('select-brush', setPenSize);
 
-    listen('received-message', receivedMessage);
-
     return () => {
       removeListener(
-        'current-player',
         'drawing-started',
         'drawing-over',
         'round-over',
@@ -135,54 +130,62 @@ const Draw = () => {
   }, []);
 
   useEffect(() => {
+    const elem = document.getElementById('canvas-container');
     // Event listeners
-    canvas?.addEventListener('mousedown', mousedown);
-    canvas?.addEventListener('mouseup', mouseup);
-    canvas?.addEventListener('mousemove', mousemove);
-    canvas?.addEventListener('touchstart', mousedown);
-    canvas?.addEventListener('touchend', mouseup);
-    canvas?.addEventListener('touchmove', mousemove);
+    elem?.addEventListener('mousedown', mousedown);
+    elem?.addEventListener('mouseup', mouseup);
+    elem?.addEventListener('mousemove', mousemove);
+    elem?.addEventListener('touchstart', mousedown);
+    elem?.addEventListener('touchend', mouseup);
+    elem?.addEventListener('touchmove', mousemove);
 
     return () => {
-      canvas?.removeEventListener('mousemove', mousemove);
-      canvas?.removeEventListener('mouseup', mouseup);
-      canvas?.removeEventListener('mousedown', mousedown);
-      canvas?.removeEventListener('touchstart', mousedown);
-      canvas?.removeEventListener('touchend', mouseup);
-      canvas?.removeEventListener('touchmove', mousemove);
+      elem?.removeEventListener('mousemove', mousemove);
+      elem?.removeEventListener('mouseup', mouseup);
+      elem?.removeEventListener('mousedown', mousedown);
+      elem?.removeEventListener('touchstart', mousedown);
+      elem?.removeEventListener('touchend', mouseup);
+      elem?.removeEventListener('touchmove', mousemove);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canvas]);
+  }, []);
 
   const draw = (clientX, clientY) => {
     if (!drawing) return;
-    const rect = canvas.getBoundingClientRect();
     if (!eraseRef.current) {
       ctx.globalCompositeOperation = 'source-over';
       ctx.strokeStyle = penColorRef.current;
       ctx.lineWidth = penSizeRef.current;
     } else {
       ctx.globalCompositeOperation = 'destination-out';
-      // ctx.strokeStyle = 'red';
       ctx.lineWidth = penSizeRef.current + 5;
     }
     ctx.lineJoin = ctx.lineCap = 'round';
-    ctx.lineTo(
-      clientX - rect.left + penSizeRef.current,
-      clientY - rect.top + penSizeRef.current,
-    );
+    ctx.lineTo(clientX, clientY);
     ctx.stroke();
   };
 
   const mousedown = ({ clientX, clientY, type, touches }) => {
-    console.log(clientX, clientY);
     if (type && !isCurrentUserDrawingRef.current) return;
     drawing = true;
     ctx.beginPath();
-    const x = type && isSmallDeviceRef.current ? touches?.[0]?.clientX : clientX;
-    const y = type && isSmallDeviceRef.current ? touches?.[0]?.clientY : clientY;
+    let x = type && isSmallDeviceRef.current ? touches?.[0]?.clientX : clientX;
+    let y = type && isSmallDeviceRef.current ? touches?.[0]?.clientY : clientY;
+    const rect = canvas.getBoundingClientRect();
+    if (type) {
+      let _x = (x -= rect.left);
+      let _y = (y -= rect.top);
+      if (isSmallDeviceRef.current) {
+        _x *= 2;
+        _y *= 2;
+      }
+      emit('mousedown', roomId, _x, _y);
+    } else if (isSmallDeviceRef.current) {
+      x /= 2;
+      y /= 2;
+    }
+
     draw(x, y);
-    if (type) emit('mousedown', roomId, x * 10, y);
   };
 
   const mouseup = (e) => {
@@ -194,46 +197,44 @@ const Draw = () => {
 
   const mousemove = ({ clientX, clientY, type, touches }) => {
     if (type && !isCurrentUserDrawingRef.current) return;
-    const x = type && isSmallDeviceRef.current ? touches?.[0]?.clientX : clientX;
-    const y = type && isSmallDeviceRef.current ? touches?.[0]?.clientY : clientY;
-    if (type) emit('mousemove', roomId, x * 10, y);
+    let x = type && isSmallDeviceRef.current ? touches?.[0]?.clientX : clientX;
+    let y = type && isSmallDeviceRef.current ? touches?.[0]?.clientY : clientY;
+    const { left, top } = canvas.getBoundingClientRect();
     const pointer = document.querySelector('.pointer');
+
+    if (type) {
+      let _x = (x -= left);
+      let _y = (y -= top);
+      if (isSmallDeviceRef.current) {
+        _x *= 2;
+        _y *= 2;
+      }
+      if (drawing) emit('mousemove', roomId, _x, _y);
+    } else if (isSmallDeviceRef.current) {
+      x /= 2;
+      y /= 2;
+    }
+
     if (pointer) {
-      const { left, top } = canvas.getBoundingClientRect();
-      if (
-        y < top + 5 ||
-        y > top + canvas.height - 10 ||
-        x < left + 5 ||
-        x > left + canvas.width - 10
-      ) {
+      if (y < 0 || y > canvas.height || x < 0 || x > canvas.width) {
         pointer.style.display = 'none';
       } else {
         pointer.style.display = 'block';
       }
-      const bufferSize = 4 + penSizes.indexOf(penSizeRef.current) * 5;
-      pointer.style.left = x + bufferSize + 'px';
-      pointer.style.top = y + bufferSize - 1 + 'px';
-      // 35 - 19/18
-      // 25 - 14/13
-      // 15 - 9/8
-      // 5 - 4/3
-      // 15 / 2^1
+      const penRadius = penSizeRef.current / 2;
+      pointer.style.left = x - penRadius + 'px';
+      pointer.style.top = y - penRadius + 'px';
     }
     draw(x, y);
   };
 
-  const clearBoard = (e) => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (e) emit('clear', roomId);
-  };
-
-  const currentPlayerHandler = (player, options) => {
-    currentPlayerRef.current = player.name;
-    dispatch(setCurrentPlayer(player));
-    dispatch(setTimeOver(false));
-    if (player.id === socketId) dispatch(setOptions(options));
-    dispatch(setShowOption(true));
-  };
+  const clearBoard = useCallback(
+    (e) => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (e) emit('clear', roomId);
+    },
+    [emit, roomId],
+  );
 
   const drawingStarted = (word) => {
     audiosRef.current.drawingStart.play();
@@ -312,7 +313,9 @@ const Draw = () => {
   };
 
   const gameOverHandler = () => {
-    // audiosRef.current.gameOver.play();
+    audiosRef.current.clock.pause();
+    audiosRef.current.clock.load();
+    audiosRef.current.gameOver.play();
     dispatch(setShowOption(true));
     setGameOver(true);
     clearInterval(timerRef.current);
@@ -324,9 +327,9 @@ const Draw = () => {
   };
 
   const receivedMessage = async (message) => {
-    if (message.sender === socketId && message.guessed) {
+    if (message.senderId === socketId && message.guessed) {
       audiosRef.current.guessed.play();
-      await new Promise((r) => setTimeout(() => r(), 300));
+      // await new Promise((r) => setTimeout(() => r(), 300));
       setGuessed(true);
     }
     dispatch(setMessages(message));
@@ -334,7 +337,7 @@ const Draw = () => {
 
   return (
     <div className="draw-container d-flex">
-      <Logo width={200} />
+      <Logo width={160} />
       <Header
         rounds={rounds}
         currentRound={currentRound}
@@ -345,7 +348,7 @@ const Draw = () => {
       />
       <div className="d-flex container">
         <Players roomId={roomId} players={players} score={score} />
-        <div>
+        <div style={{ position: 'relative' }}>
           {showOptionsScreen && currentPlayer.id && (
             <Options
               word={currentWord}
@@ -360,14 +363,24 @@ const Draw = () => {
               score={score}
             />
           )}
-          <canvas
-            id="canvas"
-            width={isSmallDeviceRef.current ? 380 : 670}
-            height={isSmallDeviceRef.current ? 380 : 500}
+          <div
+            id="canvas-container"
             style={{
               cursor: !isCurrentUserDrawingRef.current ? 'default' : 'none',
             }}
-          ></canvas>
+          >
+            <canvas
+              id="canvas"
+              width={isSmallDeviceRef.current ? 315 : 630}
+              height={isSmallDeviceRef.current ? 230 : 460}
+            ></canvas>
+            {isCurrentUserDrawingRef.current && (
+              <div
+                className="pointer"
+                style={{ width: `${penSize}px`, height: `${penSize}px` }}
+              ></div>
+            )}
+          </div>
           {isCurrentUserDrawingRef.current && (
             <Controls
               roomId={roomId}
@@ -393,12 +406,6 @@ const Draw = () => {
           isCurrentUserDrawing={isCurrentUserDrawingRef.current}
         />
       </div>
-      {isCurrentUserDrawingRef.current && (
-        <div
-          className="pointer"
-          style={{ width: `${penSize}px`, height: `${penSize}px` }}
-        ></div>
-      )}
     </div>
   );
 };

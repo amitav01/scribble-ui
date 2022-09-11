@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import './spinner.scss';
 
 const Spinner = () => (
@@ -6,4 +7,4 @@ const Spinner = () => (
   </div>
 );
 
-export default Spinner;
+export default memo(Spinner);

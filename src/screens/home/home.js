@@ -8,8 +8,8 @@ import Logo from '../../components/Logo/Logo';
 import ErrorImg from '../../assets/icons/error.png';
 import Spinner from '../../components/spinner/spinner';
 import HowToPlay from '../../components/howToPlay/howToPlay';
-import './home.scss';
 import { technologies } from '../../utils/constants';
+import './home.scss';
 
 const Home = () => {
   const { emit } = useSocket();
@@ -24,7 +24,7 @@ const Home = () => {
   const joinRoom = (roomId, event) => {
     if (!validateName()) return;
     setLoading(true);
-    const name = nameRef.current.value;
+    const name = nameRef.current.value.slice(-10);
     emit(event, roomId, name, callback(roomId, name));
   };
 
@@ -65,8 +65,8 @@ const Home = () => {
 
   return (
     <div className="home-container d-flex">
-      <Logo />
-      <div className="container d-flex">
+      <Logo width={330} />
+      <div className="card d-flex">
         <div>
           <input
             type="text"
@@ -94,14 +94,14 @@ const Home = () => {
         </div>
         {error && (
           <div className="error">
-            <img src={ErrorImg} alt="error" width={15} height={15} />
+            <img src={ErrorImg} alt="error" width={13} height={13} />
             &ensp;
             <span>{error}</span>
           </div>
         )}
       </div>
       <div className="how-to">
-        <button onClick={() => setShowDemo(true)}>How To Play</button>
+        <button onClick={() => setShowDemo(true)}>How to play</button>
       </div>
       <div className="attrition">Created by Amitav Mishra</div>
       <div className="tech">
@@ -111,7 +111,7 @@ const Home = () => {
             {technologies.map((tech) => (
               <li key={tech.name} title={tech.name}>
                 <a href={tech.link} target="__blank">
-                  <img src={tech.img} alt={tech.name} width={20} />
+                  <img src={tech.img} alt={tech.name} height={18} />
                 </a>
               </li>
             ))}

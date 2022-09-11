@@ -18,7 +18,7 @@
   .selected-color {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    // border-radius: 50%;
   }
 
   .box {
@@ -69,6 +69,11 @@
 
   @media only screen and (max-width: 800px) {
     flex-wrap: wrap;
+    width: 333px;
+    box-sizing: border-box;
+    & > * {
+      margin-right: 5px;
+    }
     > div {
       margin-bottom: 5px;
     }

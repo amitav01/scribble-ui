@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -18,7 +18,7 @@ import {
   setShowOption,
   setTimeOver,
 } from './store/actions';
-import { useSocket } from './utils/useSocket';
+import useSocket from './utils/useSocket';
 import ErrorBoundary from './components/ErrorBoundary/errorBoundary';
 import { deviceNotSupportedMessage, errorMessages } from './utils/constants';
 import playerJoinedSound from './assets/sounds/player_joined.mp3';
@@ -27,7 +27,7 @@ import './App.scss';
 
 let firstRender = true;
 
-function App() {
+const App = () => {
   const roomId = useSelector((state) => state.roomId);
   const { socketId, listen, removeListener } = useSocket();
   const dispatch = useDispatch();
@@ -57,7 +57,6 @@ function App() {
     };
     window.addEventListener('beforeunload', handler);
     return () => window.removeEventListener('beforeunload', handler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -77,7 +76,6 @@ function App() {
         'user-left',
         'server-error',
       );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const playerJoinedHandler = (allPlayers, name, isGameStarted) => {
@@ -123,7 +121,7 @@ function App() {
     dispatch(setCurrentRound(currentRound));
     dispatch(setCurrentPlayer(currrentPlayer));
     dispatch(setScore(score));
-    navigate('/play');
+    navigate('/play', { replace: true });
   };
 
   const currentPlayerHandler = (player, options) => {
@@ -141,6 +139,7 @@ function App() {
 
   const serverErrorHandler = (e) => {
     setAppError(errorMessages.server_error);
+    // eslint-disable-next-line no-console
     console.error(e);
   };
 
@@ -187,6 +186,6 @@ function App() {
       </ErrorBoundary>
     </div>
   );
-}
+};
 
 export default App;

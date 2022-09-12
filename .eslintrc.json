@@ -1,0 +1,35 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb"],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "rules": {
+    "react/jsx-filename-extension": 0,
+    "linebreak-style": 0,
+    "no-use-before-define": 0,
+    "no-alert": 0,
+    "implicit-arrow-linebreak": 0,
+    "object-curly-newline": 0,
+    "indent": 0,
+    "operator-linebreak": 0,
+    "react/function-component-definition": [2, { "namedComponents": "arrow-function" }],
+    "react/jsx-one-expression-per-line": 0,
+    "jsx-a11y/control-has-associated-label": 0,
+    "react/forbid-prop-types": 0,
+    "jsx-a11y/click-events-have-key-events": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "jsx-a11y/no-noninteractive-element-interactions": 0,
+    "react/jsx-props-no-spreading": 0,
+    "no-underscore-dangle": 0,
+    "no-multi-assign": 0,
+    "jsx-a11y/label-has-associated-control": 0,
+    "default-param-last": 0
+  }
+}

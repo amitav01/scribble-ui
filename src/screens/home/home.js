@@ -1,8 +1,8 @@
-import { useRef, memo, useState } from 'react';
+import React, { useRef, memo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import { useSocket } from '../../utils/useSocket';
+import useSocket from '../../utils/useSocket';
 import { setName, setRoomId } from '../../store/actions';
 import Logo from '../../components/Logo/Logo';
 import ErrorImg from '../../assets/icons/error.png';
@@ -28,14 +28,16 @@ const Home = () => {
     emit(event, roomId, name, callback(roomId, name));
   };
 
-  const callback = (roomId, name) => async (error) => {
-    if (error) {
-      setError(error);
+  const callback = (roomId, name) => async (err, gameStarted) => {
+    if (err) {
+      setError(err);
     } else {
-      await new Promise((r) => setTimeout(() => r(), 300));
+      await new Promise((r) => {
+        setTimeout(() => r(), 300);
+      });
       dispatch(setRoomId(roomId));
       dispatch(setName(name));
-      navigate('/lobby', { replace: true });
+      if (!gameStarted) navigate('/lobby', { replace: true });
     }
     setLoading(false);
   };
@@ -78,9 +80,11 @@ const Home = () => {
         </div>
         <div className="room">
           <div>
-            <button onClick={createRoomClickHandler}>Create a room</button>
+            <button onClick={createRoomClickHandler} type="button">
+              Create a room
+            </button>
           </div>
-          <div className="divider"></div>
+          <div className="divider" />
           <div className="join-room d-flex">
             <input
               type="text"
@@ -89,7 +93,9 @@ const Home = () => {
               placeholder="Enter Room Id"
               onFocus={() => setError()}
             />
-            <button onClick={joinRoomClickHandler}>Join a room</button>
+            <button onClick={joinRoomClickHandler} type="button">
+              Join a room
+            </button>
           </div>
         </div>
         {error && (
@@ -101,7 +107,9 @@ const Home = () => {
         )}
       </div>
       <div className="how-to">
-        <button onClick={() => setShowDemo(true)}>How to play</button>
+        <button onClick={() => setShowDemo(true)} type="button">
+          How to play
+        </button>
       </div>
       <div className="attrition">Created by Amitav Mishra</div>
       <div className="tech">

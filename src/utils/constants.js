@@ -43,6 +43,7 @@ export const colors = [
 
 export const penSizes = [5, 15, 25, 35];
 
+export const rounds = [1, 2, 3, 4, 5];
 export const drawTimes = [60, 70, 80, 90, 100, 110, 120];
 
 export const deviceNotSupportedMessage =

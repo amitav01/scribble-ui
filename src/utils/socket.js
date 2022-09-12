@@ -12,6 +12,4 @@ export const initSocket = () => {
   });
 };
 
-export const getSocket = () => {
-  return socket;
-};
+export const getSocket = () => socket;

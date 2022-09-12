@@ -1,5 +1,6 @@
-import { memo } from 'react';
-import { useSocket } from '../../utils/useSocket';
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
+import useSocket from '../../utils/useSocket';
 import Trophy from '../../assets/icons/trophy.png';
 import './options.scss';
 
@@ -29,7 +30,7 @@ const Options = ({
     );
   }
 
-  let _players = [...players];
+  const _players = [...players];
   if (gameOver) {
     _players.sort((a, b) => score[a.id].rank - score[b.id].rank);
   }
@@ -43,7 +44,12 @@ const Options = ({
               <div className="info">Choose a word</div>
               <div>
                 {options.map((op) => (
-                  <button key={op} className="option" onClick={() => chooseWord(op)}>
+                  <button
+                    key={op}
+                    className="option"
+                    onClick={() => chooseWord(op)}
+                    type="button"
+                  >
                     {op}
                   </button>
                 ))}
@@ -59,7 +65,7 @@ const Options = ({
           <div>
             <table>
               <tbody>
-                {_players.map((p, i) => {
+                {_players.map((p) => {
                   const _score = score[p.id][gameOver ? 'score' : 'currentScore'];
                   return (
                     <tr key={p.id}>
@@ -81,6 +87,19 @@ const Options = ({
       )}
     </div>
   );
+};
+
+Options.propTypes = {
+  word: PropTypes.string.isRequired,
+  showRound: PropTypes.bool.isRequired,
+  gameOver: PropTypes.bool.isRequired,
+  currentPlayer: PropTypes.object.isRequired,
+  currentRound: PropTypes.number.isRequired,
+  options: PropTypes.array.isRequired,
+  roomId: PropTypes.string.isRequired,
+  isTimeOver: PropTypes.bool.isRequired,
+  players: PropTypes.array.isRequired,
+  score: PropTypes.object.isRequired,
 };
 
 export default memo(Options);

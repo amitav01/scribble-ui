@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState, memo, useCallback } from 'react';
+import React, { useEffect, useRef, useState, memo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { useSocket } from '../../utils/useSocket';
+import useSocket from '../../utils/useSocket';
 import { colors, penSizes } from '../../utils/constants';
 import {
   reset,
@@ -90,8 +90,8 @@ const Draw = () => {
     const pointer = document.querySelector('.pointer');
     if (pointer) {
       const { left, top } = canvas.getBoundingClientRect();
-      pointer.style.left = left + canvas.width / 2 + 'px';
-      pointer.style.top = top + canvas.height / 2 + 'px';
+      pointer.style.left = `${left + canvas.width / 2}px`;
+      pointer.style.top = `${top + canvas.height / 2}px`;
     }
   }, []);
 
@@ -126,7 +126,6 @@ const Draw = () => {
         'received-message',
       );
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -147,7 +146,6 @@ const Draw = () => {
       elem?.removeEventListener('touchend', mouseup);
       elem?.removeEventListener('touchmove', mousemove);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const draw = (clientX, clientY) => {
@@ -222,8 +220,8 @@ const Draw = () => {
         pointer.style.display = 'block';
       }
       const penRadius = penSizeRef.current / 2;
-      pointer.style.left = x - penRadius + 'px';
-      pointer.style.top = y - penRadius + 'px';
+      pointer.style.left = `${x - penRadius}px`;
+      pointer.style.top = `${y - penRadius}px`;
     }
     draw(x, y);
   };
@@ -257,7 +255,7 @@ const Draw = () => {
           .split(' ')
           .map((v) => {
             const strArr = v.split('').fill('_');
-            const mid = ~~(v.length / 2);
+            const mid = Math.round(v.length / 2);
             strArr[mid] = v[mid];
             return strArr.join('');
           })
@@ -373,12 +371,12 @@ const Draw = () => {
               id="canvas"
               width={isSmallDeviceRef.current ? 315 : 630}
               height={isSmallDeviceRef.current ? 230 : 460}
-            ></canvas>
+            />
             {isCurrentUserDrawingRef.current && (
               <div
                 className="pointer"
                 style={{ width: `${penSize}px`, height: `${penSize}px` }}
-              ></div>
+              />
             )}
           </div>
           {isCurrentUserDrawingRef.current && (

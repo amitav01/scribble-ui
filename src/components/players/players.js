@@ -1,6 +1,7 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import { avatars } from '../../utils/constants';
-import { useSocket } from '../../utils/useSocket';
+import useSocket from '../../utils/useSocket';
 import './players.scss';
 
 const Players = ({ roomId, players, score }) => {
@@ -32,6 +33,12 @@ const Players = ({ roomId, players, score }) => {
       <div className="roomId">Room Id: {roomId}</div>
     </div>
   );
+};
+
+Players.propTypes = {
+  roomId: PropTypes.string.isRequired,
+  players: PropTypes.array.isRequired,
+  score: PropTypes.object.isRequired,
 };
 
 export default memo(Players);

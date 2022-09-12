@@ -1,12 +1,13 @@
-import { useRef, memo, useState } from 'react';
+import React, { useRef, memo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import Logo from '../../components/Logo/Logo';
 import Spinner from '../../components/spinner/spinner';
 import { saveGameSettings } from '../../store/actions';
-import { drawTimes, avatars } from '../../utils/constants';
-import { useSocket } from '../../utils/useSocket';
+import { drawTimes, avatars, rounds } from '../../utils/constants';
+import useSocket from '../../utils/useSocket';
 import './lobby.scss';
 
 const Lobby = ({ playGameStartSound }) => {
@@ -34,11 +35,13 @@ const Lobby = ({ playGameStartSound }) => {
   const startGame = async () => {
     if (players.length < 2) return;
     setLoading(true);
-    await new Promise((r) => setTimeout(() => r(), 500));
-    const rounds = roundsRef.current.value;
+    await new Promise((r) => {
+      setTimeout(() => r(), 500);
+    });
+    const round = roundsRef.current.value;
     const drawTime = drawTimeRef.current.value;
-    dispatch(saveGameSettings(rounds, drawTime));
-    emit('start-game', roomId, rounds, drawTime, () => setLoading(false));
+    dispatch(saveGameSettings(round, drawTime));
+    emit('start-game', roomId, round, drawTime, () => setLoading(false));
     playGameStartSound();
     navigate('/play', { replace: true });
   };
@@ -46,7 +49,7 @@ const Lobby = ({ playGameStartSound }) => {
   return (
     <div className="lobby-container">
       <Logo width={160} />
-      <div className="header"></div>
+      <div className="header" />
       <div>
         <ul className="players d-flex">
           {players.map((p) => (
@@ -69,52 +72,53 @@ const Lobby = ({ playGameStartSound }) => {
         </div>
         <div className="d-flex">
           <input type="text" maxLength={10} value={roomId} readOnly />
-          <button onClick={copy}>{copyText}</button>
+          <button onClick={copy} type="button">
+            {copyText}
+          </button>
         </div>
       </div>
 
-      {players[0] && (
-        <>
-          {socketId === players[0].id ? (
-            <div className="settings d-flex card">
-              <div className="d-flex">
-                <label>Rounds</label>
-                <select defaultValue={2} ref={roundsRef}>
-                  {Array(5)
-                    .fill()
-                    .map((_, i) => (
-                      <option key={i} value={i + 1}>
-                        {i + 1}
-                      </option>
-                    ))}
-                </select>
-              </div>
-              <div className="d-flex">
-                <label>Draw time (seconds)</label>
-                <select defaultValue={drawTimes[0]} ref={drawTimeRef}>
-                  {drawTimes.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <button onClick={startGame} disabled={players.length < 2}>
-                  Start Game
-                </button>
-              </div>
+      {players[0] &&
+        (socketId === players[0].id ? (
+          <div className="settings d-flex card">
+            <div className="d-flex">
+              <label>Rounds</label>
+              <select defaultValue={2} ref={roundsRef}>
+                {rounds.map((r) => (
+                  <option key={r} value={r}>
+                    {r}
+                  </option>
+                ))}
+              </select>
             </div>
-          ) : (
-            <div className="waiting">
-              Waiting for <span>{players[0]?.name}</span> to start the game
+            <div className="d-flex">
+              <label>Draw time (seconds)</label>
+              <select defaultValue={drawTimes[0]} ref={drawTimeRef}>
+                {drawTimes.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
             </div>
-          )}
-        </>
-      )}
+            <div>
+              <button onClick={startGame} disabled={players.length < 2} type="button">
+                Start Game
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="waiting">
+            Waiting for <span>{players[0]?.name}</span> to start the game
+          </div>
+        ))}
       {loading && <Spinner />}
     </div>
   );
+};
+
+Lobby.propTypes = {
+  playGameStartSound: PropTypes.func.isRequired,
 };
 
 export default memo(Lobby);

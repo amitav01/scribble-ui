@@ -1,5 +1,6 @@
-import { memo, useEffect, useMemo, useRef } from 'react';
-import { useSocket } from '../../utils/useSocket';
+import React, { memo, useEffect, useMemo, useRef } from 'react';
+import PropTypes from 'prop-types';
+import useSocket from '../../utils/useSocket';
 import './chats.scss';
 
 const Chats = ({
@@ -75,10 +76,20 @@ const Chats = ({
           onKeyUp={onKeypressHandler}
           readOnly={isDrawing && (guessed || isCurrentUserDrawing)}
         />
-        <button className="send" onClick={send}></button>
+        <button className="send" onClick={send} type="button" />
       </div>
     </div>
   );
+};
+
+Chats.propTypes = {
+  roomId: PropTypes.string.isRequired,
+  messages: PropTypes.array.isRequired,
+  mySocketId: PropTypes.string.isRequired,
+  time: PropTypes.number.isRequired,
+  guessed: PropTypes.bool.isRequired,
+  isDrawing: PropTypes.bool.isRequired,
+  isCurrentUserDrawing: PropTypes.bool.isRequired,
 };
 
 export default memo(Chats);

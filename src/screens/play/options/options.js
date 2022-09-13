@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import useSocket from '../../utils/useSocket';
-import Trophy from '../../assets/icons/trophy.png';
+import useSocket from '../../../utils/useSocket';
+import TrophyImg from '../../../assets/icons/trophy.png';
 import './options.scss';
 
 const Options = ({
@@ -74,7 +74,7 @@ const Options = ({
                         {!gameOver && _score !== 0 && <span>+</span>}
                         <span className={_score === 0 ? 'zero' : ''}>{_score}</span>
                         {gameOver && score[p.id].rank === 1 && (
-                          <img src={Trophy} className="winner" alt="trophy" />
+                          <img src={TrophyImg} className="winner" alt="trophy" />
                         )}
                       </td>
                     </tr>
@@ -90,7 +90,7 @@ const Options = ({
 };
 
 Options.propTypes = {
-  word: PropTypes.string.isRequired,
+  word: PropTypes.string,
   showRound: PropTypes.bool.isRequired,
   gameOver: PropTypes.bool.isRequired,
   currentPlayer: PropTypes.object.isRequired,
@@ -100,6 +100,10 @@ Options.propTypes = {
   isTimeOver: PropTypes.bool.isRequired,
   players: PropTypes.array.isRequired,
   score: PropTypes.object.isRequired,
+};
+
+Options.defaultProps = {
+  word: null,
 };
 
 export default memo(Options);

@@ -7,7 +7,7 @@ import { setName, setRoomId } from '../../store/actions';
 import Logo from '../../components/Logo/Logo';
 import ErrorImg from '../../assets/icons/error.png';
 import Spinner from '../../components/spinner/spinner';
-import HowToPlay from '../../components/howToPlay/howToPlay';
+import HowToPlay from './howToPlay/howToPlay';
 import { technologies } from '../../utils/constants';
 import './home.scss';
 

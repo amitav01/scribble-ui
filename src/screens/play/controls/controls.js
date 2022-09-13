@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
-import useSocket from '../../utils/useSocket';
-import { colors, penSizes } from '../../utils/constants';
+import useSocket from '../../../utils/useSocket';
+import { colors, penSizes } from '../../../utils/constants';
 import './controls.scss';
 
 const Controls = ({
@@ -76,7 +76,7 @@ const Controls = ({
 Controls.propTypes = {
   roomId: PropTypes.string.isRequired,
   penColor: PropTypes.string.isRequired,
-  penSize: PropTypes.object.isRequired,
+  penSize: PropTypes.number.isRequired,
   erase: PropTypes.bool.isRequired,
   setPenColor: PropTypes.func.isRequired,
   setPenSize: PropTypes.func.isRequired,

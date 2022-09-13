@@ -1,10 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
-import Draw from './screens/draw/draw';
-import Home from './screens/home/home';
-import Lobby from './screens/lobby/lobby';
 import {
   saveGameSettings,
   setCurrentPlayer,
@@ -24,6 +20,7 @@ import { deviceNotSupportedMessage, errorMessages } from './utils/constants';
 import playerJoinedSound from './assets/sounds/player_joined.mp3';
 import gameStartedSound from './assets/sounds/start_game.mp3';
 import './App.scss';
+import Router from './router';
 
 let firstRender = true;
 
@@ -153,9 +150,9 @@ const App = () => {
     );
   };
 
-  const playGameStartSound = () => {
+  const playGameStartSound = useCallback(() => {
     audiosRef.current.gameStarted.play();
-  };
+  }, []);
 
   const errorModalClose = () => {
     setAppError();
@@ -170,19 +167,7 @@ const App = () => {
         setAppError={setAppError}
         click={errorModalClose}
       >
-        <Routes>
-          <Route path="/" element={<Home />} />
-          {roomId && (
-            <>
-              <Route
-                path="/lobby"
-                element={<Lobby playGameStartSound={playGameStartSound} />}
-              />
-              <Route path="/play" element={<Draw />} />
-            </>
-          )}
-          <Route path="*" element={<Navigate replace to="/" />} />
-        </Routes>
+        <Router roomId={roomId} playGameStartSound={playGameStartSound} />
       </ErrorBoundary>
     </div>
   );

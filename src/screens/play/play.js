@@ -15,18 +15,18 @@ import {
   setTimeOver,
 } from '../../store/actions';
 
-import Options from '../../components/options/options';
-import Header from '../../components/header/header';
-import Chats from '../../components/chats/chats';
-import Players from '../../components/players/players';
-import Controls from '../../components/controls/controls';
+import Options from './options/options';
+import Header from './header/header';
+import Chats from './chats/chats';
+import Players from './players/players';
+import Controls from './controls/controls';
 import Logo from '../../components/Logo/Logo';
 import drawingStartSound from '../../assets/sounds/drawing_start.mp3';
 import guessedSound from '../../assets/sounds/guessed.mp3';
 import clockSound from '../../assets/sounds/clock.mp3';
 import timeOverSound from '../../assets/sounds/time_over.mp3';
 import gameOverSound from '../../assets/sounds/game_over.mp3';
-import './draw.scss';
+import './play.scss';
 
 let canvas;
 let ctx;

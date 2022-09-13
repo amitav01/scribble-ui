@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import useSocket from '../../utils/useSocket';
+import useSocket from '../../../utils/useSocket';
 import './chats.scss';
 
 const Chats = ({

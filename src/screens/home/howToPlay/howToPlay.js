@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { howToPlayTexts } from '../../utils/constants';
+import { howToPlayTexts } from '../../../utils/constants';
 import './howToPlay.scss';
 
 const HowToPlay = ({ close }) => (

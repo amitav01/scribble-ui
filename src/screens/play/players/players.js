@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { avatars } from '../../utils/constants';
-import useSocket from '../../utils/useSocket';
+import { avatars } from '../../../utils/constants';
+import useSocket from '../../../utils/useSocket';
 import './players.scss';
 
 const Players = ({ roomId, players, score }) => {

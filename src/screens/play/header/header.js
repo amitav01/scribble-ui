@@ -37,10 +37,14 @@ const Header = ({
 Header.propTypes = {
   rounds: PropTypes.number.isRequired,
   currentRound: PropTypes.number.isRequired,
-  currentWord: PropTypes.string.isRequired,
+  currentWord: PropTypes.string,
   time: PropTypes.number.isRequired,
   totalTime: PropTypes.number.isRequired,
   isCurrentUserDrawing: PropTypes.bool.isRequired,
+};
+
+Header.defaultProps = {
+  currentWord: null,
 };
 
 export default memo(Header);

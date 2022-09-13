@@ -38,8 +38,8 @@ const Lobby = ({ playGameStartSound }) => {
     await new Promise((r) => {
       setTimeout(() => r(), 500);
     });
-    const round = roundsRef.current.value;
-    const drawTime = drawTimeRef.current.value;
+    const round = Number(roundsRef.current.value);
+    const drawTime = Number(drawTimeRef.current.value);
     dispatch(saveGameSettings(round, drawTime));
     emit('start-game', roomId, round, drawTime, () => setLoading(false));
     playGameStartSound();
